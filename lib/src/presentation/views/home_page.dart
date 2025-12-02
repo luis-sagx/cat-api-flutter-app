@@ -65,10 +65,6 @@ class _HomePageState extends State<HomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (vm.errorMessage != null) {
-      return Center(child: Text('Error: ${vm.errorMessage}'));
-    }
-
     if (vm.cats.isEmpty) {
       return const Center(child: Text('No cats found.'));
     }

@@ -17,29 +17,32 @@ class CatViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasMore => _hasMore;
+  int get page => _page;
 
   CatViewModel({required this.getCatsUseCase, required this.searchCatsUseCase});
 
-  Future<void> loadCats({bool refresh = false}) async {
+  Future<void> loadCats({int? targetPage, bool refresh = false}) async {
     if (_isLoading) return;
-    if (refresh) {
-      _page = 0;
-      _cats = [];
-      _hasMore = true;
-    }
-    if (!_hasMore) return;
 
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final newCats = await getCatsUseCase.execute(_page, _limit);
-      if (newCats.isEmpty) {
+      if (refresh) {
+        _page = 0;
+        _hasMore = true;
+        _cats = [];
+      }
+      final pageToLoad = refresh ? 0 : (targetPage ?? _page);
+      final newCats = await getCatsUseCase.execute(pageToLoad, _limit);
+
+      if (newCats.isEmpty && pageToLoad > 0) {
         _hasMore = false;
       } else {
-        _cats.addAll(newCats);
-        _page++;
+        _cats = newCats;
+        _page = pageToLoad;
+        _hasMore = newCats.length == _limit;
       }
     } catch (e) {
       _error = e.toString();
@@ -47,6 +50,18 @@ class CatViewModel extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  void nextPage() {
+    if (_hasMore) {
+      loadCats(targetPage: _page + 1);
+    }
+  }
+
+  void previousPage() {
+    if (_page > 0) {
+      loadCats(targetPage: _page - 1);
+    }
   }
 
   Future<void> searchCats(String query) async {

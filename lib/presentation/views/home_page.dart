@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -20,18 +19,10 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CatViewModel>().loadCats();
     });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        context.read<CatViewModel>().loadCats();
-      }
-    });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -65,32 +56,26 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Consumer<CatViewModel>(
         builder: (context, viewModel, child) {
-          if (viewModel.isLoading && viewModel.cats.isEmpty) {
+          if (viewModel.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (viewModel.error != null && viewModel.cats.isEmpty) {
+          if (viewModel.error != null) {
             return Center(child: Text('Error: ${viewModel.error}'));
+          }
+
+          if (viewModel.cats.isEmpty) {
+            return const Center(child: Text('No cats found.'));
           }
 
           return RefreshIndicator(
             onRefresh: () async {
               _searchController.clear();
-              await viewModel.loadCats(refresh: true);
+              await viewModel.loadCats(targetPage: 0);
             },
             child: ListView.builder(
-              controller: _scrollController,
-              itemCount: viewModel.cats.length + (viewModel.hasMore ? 1 : 0),
+              itemCount: viewModel.cats.length,
               itemBuilder: (context, index) {
-                if (index == viewModel.cats.length) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-
                 final cat = viewModel.cats[index];
                 return Card(
                   margin: const EdgeInsets.all(8),
@@ -147,6 +132,30 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: Consumer<CatViewModel>(
+        builder: (context, viewModel, child) {
+          return BottomAppBar(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: viewModel.page > 0
+                      ? () => viewModel.previousPage()
+                      : null,
+                  child: const Text('Previous'),
+                ),
+                Text('Page ${viewModel.page + 1}'),
+                ElevatedButton(
+                  onPressed: viewModel.hasMore
+                      ? () => viewModel.nextPage()
+                      : null,
+                  child: const Text('Next'),
+                ),
+              ],
             ),
           );
         },

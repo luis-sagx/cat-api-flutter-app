@@ -5,6 +5,7 @@ import 'data/repositories/cat_repository_impl.dart';
 import 'domain/usescases/get_cat_usecases.dart';
 import 'presentation/viewmodels/cat_viewmodel.dart';
 import 'presentation/views/home_page.dart';
+import 'utils/themes/general_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,10 +34,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Cat App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: GeneralTheme.lightTheme,
         home: const HomePage(),
       ),
     );

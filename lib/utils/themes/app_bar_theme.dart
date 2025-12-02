@@ -7,6 +7,8 @@ class AppBarThemeApp {
     foregroundColor: SchemaColor.lightTextColor,
     centerTitle: true,
     elevation: 4,
+    iconTheme: IconThemeData(color: SchemaColor.secondaryColor),
+    actionsIconTheme: IconThemeData(color: SchemaColor.secondaryColor),
     titleTextStyle: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,

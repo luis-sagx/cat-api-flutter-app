@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sagnay_luis_prueba2/utils/themes/schema_color.dart';
+import 'schema_color.dart';
 
 class BgThemeApp {
   static const BoxDecoration bgDecoration = BoxDecoration(

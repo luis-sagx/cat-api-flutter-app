@@ -9,6 +9,8 @@ class ButtonThemeApp {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      shadowColor: SchemaColor.accentColor.withOpacity(0.25),
+      elevation: 3,
     ),
   );
 
@@ -17,7 +19,7 @@ class ButtonThemeApp {
       foregroundColor: SchemaColor.darkTextColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      side: BorderSide(color: SchemaColor.secondaryColor, width: 2),
+      side: BorderSide(color: SchemaColor.accentColor, width: 2),
       textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
     ),
   );

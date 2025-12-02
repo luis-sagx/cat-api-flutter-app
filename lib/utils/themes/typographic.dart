@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sagnay_luis_prueba2/utils/themes/schema_color.dart';
+import 'schema_color.dart';
 
 class Typographic {
   static const TextTheme textTheme = TextTheme(
@@ -7,13 +7,13 @@ class Typographic {
       fontSize: 28,
       fontWeight: FontWeight.bold,
       letterSpacing: 0.25,
-      color: SchemaColor.primaryColor,
+      color: SchemaColor.accentColor,
     ),
     titleLarge: TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.w600,
       letterSpacing: 0.15,
-      color: SchemaColor.darkTextColor,
+      color: SchemaColor.primaryColor,
     ),
     bodyMedium: TextStyle(
       fontSize: 16,
